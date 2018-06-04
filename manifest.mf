@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+
+Name: Choreo
+Element-Map: org/unclesniper/choreo/build/resource/elements.properties
+Requires: https://github.com/UncleSniper/java-release/raw/master/org.unclesniper.choreo.core-current.jar
