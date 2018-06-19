@@ -46,6 +46,10 @@ public class Component {
 			}
 		}
 
+		public static Iterable<Type> knownTypes() {
+			return Type.TYPES.values();
+		}
+
 	}
 
 	public interface GoalNamePrefixMapper {
@@ -316,6 +320,78 @@ public class Component {
 
 	public FileArtifact getUnexposedHeader(Artifact exposed) {
 		return unexposedHeaders.get(exposed);
+	}
+
+	public void addReverseUnexposedHeader(Artifact unexposed, FileArtifact exposed) {
+		if(unexposed == null)
+			return;
+		if(exposed == null)
+			reverseUnexposedHeaders.remove(unexposed);
+		else
+			reverseUnexposedHeaders.put(unexposed, exposed);
+	}
+
+	public void removeReverseUnexposedHeader(Artifact unexposed) {
+		reverseUnexposedHeaders.remove(unexposed);
+	}
+
+	public void clearReverseUnexposedHeaders() {
+		reverseUnexposedHeaders.clear();
+	}
+
+	public FileArtifact getReverseUnexposedHeader(Artifact unexposed) {
+		return reverseUnexposedHeaders.get(unexposed);
+	}
+
+	public void addHeaderExposeDirectory(Language language, File directory) {
+		if(directory == null)
+			return;
+		Set<File> directories = exposeDirectories.get(language);
+		if(directories == null) {
+			directories = new HashSet<File>();
+			exposeDirectories.put(language, directories);
+		}
+		directories.add(directory);
+	}
+
+	public void removeHeaderExposeDirectory(Language language, File directory) {
+		if(directory == null)
+			return;
+		Set<File> directories = exposeDirectories.get(language);
+		if(directories != null)
+			directories.remove(directory);
+	}
+
+	public void clearHeaderExposeDirectories(Language language) {
+		Set<File> directories = exposeDirectories.get(language);
+		if(directories != null)
+			directories.clear();
+	}
+
+	public void clearHeaderExposeDirectories() {
+		exposeDirectories.clear();
+	}
+
+	public Iterable<File> getHeaderExposeDirectories(Language language) {
+		Set<File> directories = exposeDirectories.get(language);
+		return directories == null ? new EmptyIterable<File>() : directories;
+	}
+
+	public static int getMaximalComponentTypeWidth(Iterable<Type> types, ComponentTypeStringifier stringifier) {
+		if(types == null)
+			types = Type.knownTypes();
+		if(stringifier == null)
+			stringifier = ToStringComponentTypeStringifier.instance;
+		int max = 0;
+		for(Type type : types) {
+			String s = stringifier.stringifyComponentType(type);
+			if(s != null) {
+				int length = s.length();
+				if(length > max)
+					max = length;
+			}
+		}
+		return max;
 	}
 
 }

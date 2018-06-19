@@ -1,5 +1,7 @@
 package org.unclesniper.choreo.build;
 
+import java.io.IOException;
+
 public interface Mood {
 
 	boolean present(Artifact artifact);
@@ -10,7 +12,7 @@ public interface Mood {
 
 	void modified(Artifact artifact, BuildContext context);
 
-	void remove(Artifact artifact);
+	void remove(Artifact artifact) throws IOException;
 
 	void require(Artifact artifact, BuildContext context);
 

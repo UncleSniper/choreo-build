@@ -1,5 +1,7 @@
 package org.unclesniper.choreo.build;
 
+import java.io.IOException;
+
 public final class DefinitiveMood implements Mood {
 
 	public static final Mood instance = new DefinitiveMood();
@@ -7,28 +9,27 @@ public final class DefinitiveMood implements Mood {
 	public DefinitiveMood() {}
 
 	public boolean present(Artifact artifact) {
-		//TODO
-		return false;
+		return artifact.isPresent();
 	}
 
 	public void modificationTimestamp(Artifact artifact, BuildSink<Long> sink) {
-		//TODO
+		artifact.getModificationTimestamp(sink);
 	}
 
 	public void virtualClock(Artifact artifact, BuildSink<Long> sink) {
-		//TODO
+		artifact.getVirtualClock(sink);
 	}
 
 	public void modified(Artifact artifact, BuildContext context) {
-		//TODO
+		artifact.notifyModified(context);
 	}
 
-	public void remove(Artifact artifact) {
-		//TODO
+	public void remove(Artifact artifact) throws IOException {
+		artifact.remove();
 	}
 
 	public void require(Artifact artifact, BuildContext context) {
-		//TODO
+		artifact.require(context);
 	}
 
 	public void perform(Transform transform, BuildContext context, Artifact artifact) {
@@ -36,12 +37,11 @@ public final class DefinitiveMood implements Mood {
 	}
 
 	public boolean isStaticallyUpToDate(Artifact artifact) {
-		//TODO
-		return false;
+		return artifact.hasArtifactFlags(Artifact.AFL_DEFINITIVE_STATICALLY_UP_TO_DATE);
 	}
 
 	public void markAsStaticallyUpToDate(Artifact artifact) {
-		//TODO
+		artifact.addArtifactFlags(Artifact.AFL_DEFINITIVE_STATICALLY_UP_TO_DATE);
 	}
 
 }
